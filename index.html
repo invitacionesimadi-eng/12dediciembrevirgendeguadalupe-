@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Invitaciones Digitales para Celular </title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Great+Vibes&family=Montserrat:wght@300;400;600;800&family=Outfit:wght@300;400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Montserrat', 'sans-serif'],
+            outfit: ['Outfit', 'sans-serif'],
+            cinzel: ['Cinzel', 'serif'],
+            cursive: ['Great Vibes', 'cursive'],
+            pixel: ['"Press Start 2P"', 'cursive'],
+          },
+          colors: {
+            gold: {
+              300: '#fde047',
+              400: '#facc15',
+              500: '#eab308',
+              600: '#ca8a04',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    /* Phone Mockup Frame */
+    .phone-mockup {
+      width: 340px;
+      height: 680px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(59, 130, 246, 0.15);
+    }
+    @media (min-width: 1280px) {
+      .phone-mockup {
+        width: 360px;
+        height: 720px;
+      }
+    }
+
+    /* Themes CSS for Preview Box */
+    .theme-gold {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: #f8fafc;
+      font-family: 'Cinzel', serif;
+    }
+    .theme-gold .accent-card {
+      background: rgba(30, 27, 75, 0.6);
+      border: 1px solid rgba(234, 179, 8, 0.4);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      backdrop-filter: blur(8px);
+    }
+    .theme-gold .accent-btn {
+      background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%);
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .theme-infantil {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
+      color: #2d3748;
+      font-family: 'Outfit', sans-serif;
+    }
+    .theme-infantil .accent-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 2px dashed #f6ad55;
+      border-radius: 20px;
+    }
+    .theme-infantil .accent-btn {
+      background: #ed8936;
+      color: white;
+      font-weight: 700;
+      border-radius: 9999px;
+    }
+
+    .theme-boda {
+      background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+      color: #334155;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .theme-boda .accent-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+    .theme-boda .accent-btn {
+      background: #475569;
+      color: #ffffff;
+    }
+
+    .theme-neon {
+      background: #09090b;
+      color: #00ffcc;
+      font-family: 'Outfit', sans-serif;
+    }
+    .theme-neon .accent-card {
+      background: rgba(18, 18, 20, 0.85);
+      border: 1px solid #ff007f;
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+    }
+    .theme-neon .accent-btn {
+      background: linear-gradient(90deg, #ff007f, #7928ca);
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(255, 0, 127, 0.6);
+    }
+
+    .theme-minimal {
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .theme-minimal .accent-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+    .theme-minimal .accent-btn {
+      background: #0f172a;
+      color: #ffffff;
+    }
+
+    /* Floating music animation */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 0.4; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .music-pulse {
+      animation: pulse-ring 2s infinite;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col font-sans overflow-x-hidden antialiased">
+
+  <!-- Navigation / Header -->
+  <header class="bg-slate-900/90 border-b border-slate-800 backdrop-blur-md sticky top-0 z-40 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="bg-gradient-to-tr from-amber-500 to-yellow-300 p-2 rounded-xl text-slate-950 font-bold text-xl shadow-lg shadow-amber-500/20">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+      </div>
+      <div>
+        <h1 class="font-outfit font-bold text-lg leading-tight text-white">Gaby Rodriguez</h1>
+        <p class="text-xs text-slate-400">Generador de Invitaciones Digitales Interactivas</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="triggerConfettiPreview()" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition flex items-center gap-1.5 border border-slate-700">
+        <i class="fa-solid fa-party-horn text-yellow-400"></i>
+        <span>Probar Confetti</span>
+      </button>
+      <button onclick="downloadStandaloneHTML()" class="px-4 py-2 text-sm bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold rounded-xl shadow-lg shadow-emerald-900/30 transition flex items-center gap-2">
+        <i class="fa-solid fa-download"></i>
+        <span class="hidden sm:inline">Generar & Descargar HTML</span>
+        <span class="sm:hidden">Descargar</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Grid Layout -->
+  <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 md:p-6 max-w-[1600px] mx-auto w-full">
+    
+    <!-- Left Column: Controls and Form (7 Cols) -->
+    <section class="lg:col-span-7 flex flex-col gap-5">
+      
+      <!-- Tab Navigation -->
+      <nav class="flex bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800 overflow-x-auto gap-1">
+        <button onclick="switchTab('theme')" id="tab-btn-theme" class="tab-btn active flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 bg-amber-500 text-slate-950 shadow">
+          <i class="fa-solid fa-palette"></i>
+          <span>1. Tema</span>
+        </button>
+        <button onclick="switchTab('data')" id="tab-btn-data" class="tab-btn flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-user-pen"></i>
+          <span>2. Datos</span>
+        </button>
+        <button onclick="switchTab('media')" id="tab-btn-media" class="tab-btn flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-photo-film"></i>
+          <span>3. Foto & Audio</span>
+        </button>
+        <button onclick="switchTab('rsvp')" id="tab-btn-rsvp" class="tab-btn flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>4. Asistencia</span>
+        </button>
+      </nav>
+
+      <!-- Panel Wrapper -->
+      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 md:p-6 shadow-xl flex-1 backdrop-blur-sm">
+        
+        <!-- Tab 1: Themes Selection -->
+        <div id="tab-content-theme" class="tab-content flex flex-col gap-4">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Estilo y Tema Visual
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Selecciona un tema predefinido o sube tu propia imagen de fondo personalizada.</p>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
+            <!-- Theme Card Gold -->
+            <button onclick="setTheme('gold')" class="theme-card-option p-3 rounded-xl border border-slate-700 bg-slate-800/60 hover:border-amber-400 transition text-left flex flex-col gap-2 group relative overflow-hidden active">
+              <div class="h-16 rounded-lg bg-gradient-to-br from-slate-900 to-indigo-950 p-2 border border-amber-500/30 flex flex-col justify-center items-center">
+                <span class="font-cinzel text-xs text-amber-300 font-bold">Elegante Gold</span>
+                <span class="text-[10px] text-slate-400">XV Años / Gala / 50s</span>
+              </div>
+              <span class="text-xs font-semibold text-slate-300 group-hover:text-amber-400 transition flex items-center justify-between">
+                Elegante Gold
+                <i class="fa-solid fa-circle-check text-amber-400 opacity-100"></i>
+              </span>
+            </button>
+
+            <!-- Theme Card Infantil -->
+            <button onclick="setTheme('infantil')" class="theme-card-option p-3 rounded-xl border border-slate-800 bg-slate-800/60 hover:border-orange-400 transition text-left flex flex-col gap-2 group">
+              <div class="h-16 rounded-lg bg-gradient-to-br from-pink-300 to-orange-200 p-2 flex flex-col justify-center items-center text-slate-800">
+                <span class="font-outfit text-xs font-bold">Festivo Infantil</span>
+                <span class="text-[10px] text-slate-600">Niños / Baby Shower</span>
+              </div>
+              <span class="text-xs font-semibold text-slate-300 group-hover:text-orange-400 transition flex items-center justify-between">
+                Festivo Infantil
+                <i class="fa-solid fa-circle-check text-slate-600 opacity-0"></i>
+              </span>
+            </button>
+
+            <!-- Theme Card Boda/Floral -->
+            <button onclick="setTheme('boda')" class="theme-card-option p-3 rounded-xl border border-slate-800 bg-slate-800/60 hover:border-slate-400 transition text-left flex flex-col gap-2 group">
+              <div class="h-16 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 p-2 flex flex-col justify-center items-center text-slate-800">
+                <span class="font-sans text-xs font-bold">Boda & Minimal</span>
+                <span class="text-[10px] text-slate-500">Matrimonio / Formal</span>
+              </div>
+              <span class="text-xs font-semibold text-slate-300 group-hover:text-slate-200 transition flex items-center justify-between">
+                Boda & Floral
+                <i class="fa-solid fa-circle-check text-slate-600 opacity-0"></i>
+              </span>
+            </button>
+
+            <!-- Theme Card Neon -->
+            <button onclick="setTheme('neon')" class="theme-card-option p-3 rounded-xl border border-slate-800 bg-slate-800/60 hover:border-pink-500 transition text-left flex flex-col gap-2 group">
+              <div class="h-16 rounded-lg bg-black p-2 border border-pink-500 flex flex-col justify-center items-center text-cyan-300">
+                <span class="font-outfit text-xs font-bold text-pink-500">Party Neón</span>
+                <span class="text-[10px] text-cyan-300">Fiestas / DJ / Club</span>
+              </div>
+              <span class="text-xs font-semibold text-slate-300 group-hover:text-pink-400 transition flex items-center justify-between">
+                Party Neón
+                <i class="fa-solid fa-circle-check text-slate-600 opacity-0"></i>
+              </span>
+            </button>
+
+            <!-- Theme Card Clean Minimal -->
+            <button onclick="setTheme('minimal')" class="theme-card-option p-3 rounded-xl border border-slate-800 bg-slate-800/60 hover:border-blue-400 transition text-left flex flex-col gap-2 group">
+              <div class="h-16 rounded-lg bg-slate-100 p-2 flex flex-col justify-center items-center text-slate-900">
+                <span class="font-sans text-xs font-bold">Limpio Moderno</span>
+                <span class="text-[10px] text-slate-600">Reunión / Graduación</span>
+              </div>
+              <span class="text-xs font-semibold text-slate-300 group-hover:text-blue-400 transition flex items-center justify-between">
+                Limpio Moderno
+                <i class="fa-solid fa-circle-check text-slate-600 opacity-0"></i>
+              </span>
+            </button>
+
+            <!-- Theme Card Custom Image -->
+            <button onclick="setTheme('custom')" id="theme-card-custom" class="theme-card-option p-3 rounded-xl border border-slate-800 bg-slate-800/60 hover:border-amber-400 transition text-left flex flex-col gap-2 group">
+              <div id="custom-bg-thumb" class="h-16 rounded-lg bg-slate-950 p-2 border border-dashed border-amber-400/50 flex flex-col justify-center items-center text-amber-300 bg-cover bg-center">
+                <i class="fa-solid fa-image text-lg mb-0.5"></i>
+                <span class="text-[10px] text-slate-300 font-semibold">Tu Imagen</span>
+              </div>
+              <span class="text-xs font-semibold text-slate-300 group-hover:text-amber-400 transition flex items-center justify-between">
+                Fondo Propio
+                <i class="fa-solid fa-circle-check text-slate-600 opacity-0"></i>
+              </span>
+            </button>
+          </div>
+
+          <!-- Custom Background Image Upload Box -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col gap-3 mt-1">
+            <span class="text-xs font-semibold text-slate-300 flex items-center gap-2">
+              <i class="fa-solid fa-file-image text-amber-400"></i> Subir Imagen de Fondo Personalizada
+            </span>
+            <div class="flex items-center gap-3">
+              <input type="file" id="input-bg-file" accept="image/*" onchange="handleBgUpload(event)" class="hidden">
+              <label for="input-bg-file" class="cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-lg border border-slate-700 transition">
+                <i class="fa-solid fa-upload"></i> Seleccionar Fondo Local
+              </label>
+              <button onclick="removeCustomBg()" class="px-2.5 py-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-300 text-xs rounded-lg border border-rose-800 transition">
+                Quitar Fondo
+              </button>
+            </div>
+            <p class="text-[11px] text-slate-500">
+              Se recomienda una imagen vertical (relación 9:16). Se convertirá automáticamente a Base64 para guardarse sin requerir servidores externos.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tab 2: Event & Birthday Person Data -->
+        <div id="tab-content-data" class="tab-content flex-col gap-4 hidden">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-cake-candles text-amber-400"></i> Datos del Festejado y Evento
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Ingresa el nombre, título, fechas y ubicación de la celebración.</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Nombre del Festejado/a</label>
+              <input type="text" id="input-name" value="Sofía Rodríguez" oninput="updatePreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Tipo de Evento / Subtítulo</label>
+              <input type="text" id="input-event-type" value="Mis Mis XV Años" oninput="updatePreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Mensaje o Frase Especial</label>
+              <textarea id="input-phrase" rows="2" oninput="updatePreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400">¡Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace mágicos! Acompáñame a celebrar.</textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Fecha y Hora del Evento</label>
+              <input type="datetime-local" id="input-datetime" onchange="updatePreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Lugar / Salón de Eventos</label>
+              <input type="text" id="input-location" value="Jardín de Eventos Las Encinas, Av. Principal #123" oninput="updatePreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Enlace de Google Maps (Opcional)</label>
+              <input type="url" id="input-maps-url" placeholder="https://maps.google.com/..." oninput="updatePreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400">
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Photo and Background Audio -->
+        <div id="tab-content-media" class="tab-content flex-col gap-4 hidden">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-icons text-amber-400"></i> Multimedia (Foto & Audio)
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Los archivos multimedia se incrustan en formato Base64 para garantizar que el HTML descargado funcione sin internet.</p>
+          </div>
+
+          <!-- Image Upload Block -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
+            <span class="text-xs font-semibold text-slate-300 flex items-center gap-2">
+              <i class="fa-solid fa-image text-emerald-400"></i> Foto Principal del Festejado/a
+            </span>
+            <div class="flex items-center gap-4">
+              <img id="img-preview-thumb" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" class="w-16 h-16 rounded-full object-cover border-2 border-amber-400 shadow">
+              <div class="flex-1">
+                <input type="file" id="input-photo-file" accept="image/*" onchange="handlePhotoUpload(event)" class="hidden">
+                <label for="input-photo-file" class="cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-lg border border-slate-700 transition">
+                  <i class="fa-solid fa-upload"></i> Subir Foto Local
+                </label>
+                <p class="text-[11px] text-slate-500 mt-1">Soporta JPG, PNG, WEBP (se recomienda formato vertical o cuadrado).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Audio MP3 Upload Block -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
+            <span class="text-xs font-semibold text-slate-300 flex items-center gap-2">
+              <i class="fa-solid fa-music text-amber-400"></i> Música de Fondo (MP3)
+            </span>
+            
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center gap-2">
+                <input type="file" id="input-audio-file" accept="audio/mp3,audio/*" onchange="handleAudioUpload(event)" class="hidden">
+                <label for="input-audio-file" class="cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-lg border border-slate-700 transition">
+                  <i class="fa-solid fa-file-audio"></i> Subir Archivo MP3 Local
+                </label>
+                <button onclick="clearAudio()" class="px-2.5 py-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-300 text-xs rounded-lg border border-rose-800 transition">
+                  Quitar Audio
+                </button>
+              </div>
+              
+              <div class="text-[11px] text-slate-400 flex items-center gap-2 mt-1">
+                <span id="audio-filename" class="italic truncate max-w-[200px]">Música por defecto cargada</span>
+                <span id="audio-status-badge" class="px-2 py-0.5 bg-emerald-950 text-emerald-400 text-[10px] rounded-full border border-emerald-800">Listo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: RSVP & WhatsApp Confirmation -->
+        <div id="tab-content-rsvp" class="tab-content flex-col gap-4 hidden">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-brands fa-whatsapp text-emerald-400"></i> Confirmación por WhatsApp
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Configura el número telefónico y mensaje para que los invitados confirmen con 1 toque.</p>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Número de WhatsApp (con código de país sin +)</label>
+              <div class="relative">
+                <span class="absolute left-3 top-2.5 text-slate-500 text-xs"><i class="fa-solid fa-phone"></i></span>
+                <input type="text" id="input-whatsapp-num" value="5215512345678" oninput="updatePreview()" placeholder="Ej. 5215512345678" class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-8 pr-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+              </div>
+              <p class="text-[10px] text-slate-500 mt-1">Ejemplo: 52155... (México: 52 + 10 dígitos, España: 34 + 9 dígitos).</p>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Mensaje Predeterminado del Invitado</label>
+              <textarea id="input-whatsapp-msg" rows="2" oninput="updatePreview()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">¡Hola! Confirmo con mucho gusto mi asistencia al evento de Sofía Rodríguez.</textarea>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Right Column: Interactive Phone Preview (5 Cols) -->
+    <section class="lg:col-span-5 flex flex-col items-center justify-center relative">
+      
+      <div class="text-center mb-3">
+        <span class="text-xs uppercase tracking-widest font-bold text-slate-400 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-mobile-screen-button text-amber-400"></i> Vista Previa en Tiempo Real
+        </span>
+      </div>
+
+      <!-- Smartphone Frame Container -->
+      <div class="phone-mockup relative rounded-[40px] border-[10px] border-slate-800 bg-slate-950 overflow-hidden flex flex-col transition-all duration-300">
+        
+        <!-- Phone Speaker & Camera Notch Bar -->
+        <div class="absolute top-0 left-0 right-0 h-6 bg-slate-800 z-30 flex justify-center items-center rounded-b-xl mx-auto w-36 shadow-sm">
+          <div class="w-12 h-1.5 bg-slate-900 rounded-full"></div>
+          <div class="w-2.5 h-2.5 bg-slate-900 rounded-full ml-3"></div>
+        </div>
+
+        <!-- Phone Dynamic Screen Body -->
+        <div id="phone-screen" class="w-full h-full theme-gold overflow-y-auto relative pt-8 pb-10 px-4 flex flex-col items-center text-center justify-between transition-colors duration-300">
+          
+          <!-- Floating Music Control Toggle -->
+          <div class="absolute top-8 right-3 z-20">
+            <button id="preview-music-btn" onclick="togglePreviewAudio()" class="w-9 h-9 rounded-full bg-slate-900/80 text-amber-400 border border-amber-400/40 flex items-center justify-center shadow-lg music-pulse transition active:scale-95">
+              <i id="preview-music-icon" class="fa-solid fa-music text-xs"></i>
+            </button>
+          </div>
+
+          <!-- Top Decorative Badge -->
+          <div class="mt-2">
+            <span id="prev-event-type" class="text-[11px] tracking-widest uppercase font-semibold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              Mis XV Años
+            </span>
+          </div>
+
+          <!-- Main Portrait Photo -->
+          <div class="my-3 relative">
+            <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-amber-400/80 shadow-2xl mx-auto relative z-10">
+              <img id="prev-photo" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute inset-0 rounded-full bg-amber-400/20 blur-md -z-0"></div>
+          </div>
+
+          <!-- Name & Special Message -->
+          <div class="space-y-1 my-1 w-full px-2">
+            <h2 id="prev-name" class="text-2xl font-bold tracking-wide text-amber-300 leading-tight">Sofía Rodríguez</h2>
+            <p id="prev-phrase" class="text-[11px] text-slate-300 italic opacity-90 leading-relaxed max-w-[260px] mx-auto">
+              ¡Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace mágicos!
+            </p>
+          </div>
+
+          <!-- Live Countdown Timer Block -->
+          <div class="w-full my-2">
+            <div class="accent-card rounded-2xl p-3">
+              <span class="text-[10px] tracking-wider uppercase opacity-80 block mb-1.5 font-semibold">Faltan Solo:</span>
+              <div class="grid grid-cols-4 gap-1 text-center">
+                <div class="bg-slate-950/40 p-1.5 rounded-lg border border-white/10">
+                  <span id="prev-days" class="text-base font-bold block leading-none">00</span>
+                  <span class="text-[8px] opacity-75">DÍAS</span>
+                </div>
+                <div class="bg-slate-950/40 p-1.5 rounded-lg border border-white/10">
+                  <span id="prev-hours" class="text-base font-bold block leading-none">00</span>
+                  <span class="text-[8px] opacity-75">HRS</span>
+                </div>
+                <div class="bg-slate-950/40 p-1.5 rounded-lg border border-white/10">
+                  <span id="prev-mins" class="text-base font-bold block leading-none">00</span>
+                  <span class="text-[8px] opacity-75">MIN</span>
+                </div>
+                <div class="bg-slate-950/40 p-1.5 rounded-lg border border-white/10">
+                  <span id="prev-secs" class="text-base font-bold block leading-none">00</span>
+                  <span class="text-[8px] opacity-75">SEG</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Location Info -->
+          <div class="w-full my-1 space-y-2">
+            <div class="accent-card rounded-xl p-2.5 text-xs flex items-center justify-between text-left">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-amber-400 text-sm"></i>
+                <div class="overflow-hidden">
+                  <span class="block text-[10px] opacity-70 uppercase font-bold">Lugar del Evento</span>
+                  <span id="prev-location" class="text-[11px] font-semibold truncate block">Jardín Las Encinas</span>
+                </div>
+              </div>
+              <a id="prev-maps-link" href="#" target="_blank" class="text-[10px] underline hover:text-amber-300 font-bold ml-1 hidden">Ver Mapa</a>
+            </div>
+          </div>
+
+          <!-- Action Buttons (RSVP) -->
+          <div class="w-full mt-2 space-y-2">
+            <a id="prev-whatsapp-btn" href="#" target="_blank" class="accent-btn w-full py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg transition transform active:scale-95">
+              <i class="fa-brands fa-whatsapp text-sm"></i>
+              <span>Confirmar Asistencia</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Audio Element for Preview -->
+  <audio id="preview-audio-player" loop></audio>
+
+  <script>
+    // Global State Container
+    const state = {
+      theme: 'gold',
+      customBgBase64: '', // Stores custom background image Base64 string
+      name: 'Sofía Rodríguez',
+      eventType: 'Mis XV Años',
+      phrase: '¡Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace mágicos! Acompáñame a celebrar.',
+      datetime: '',
+      location: 'Jardín de Eventos Las Encinas, Av. Principal #123',
+      mapsUrl: '',
+      whatsappNum: '5215512345678',
+      whatsappMsg: '¡Hola! Confirmo con mucho gusto mi asistencia al evento de Sofía Rodríguez.',
+      photoBase64: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+      audioBase64: '',
+      isPlayingAudio: false
+    };
+
+    // Default target date: 30 days from now
+    const defaultDate = new Date();
+    defaultDate.setDate(defaultDate.getDate() + 30);
+    defaultDate.setHours(19, 0, 0, 0);
+    state.datetime = defaultDate.toISOString().slice(0, 16);
+    document.getElementById('input-datetime').value = state.datetime;
+
+    function switchTab(tabKey) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-amber-500', 'text-slate-950', 'shadow');
+        btn.classList.add('text-slate-400');
+      });
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+        content.classList.remove('flex');
+      });
+
+      const activeBtn = document.getElementById(`tab-btn-${tabKey}`);
+      const activeContent = document.getElementById(`tab-content-${tabKey}`);
+
+      if (activeBtn && activeContent) {
+        activeBtn.classList.add('bg-amber-500', 'text-slate-950', 'shadow');
+        activeBtn.classList.remove('text-slate-400');
+        activeContent.classList.remove('hidden');
+        activeContent.classList.add('flex');
+      }
+    }
+
+    function setTheme(themeName) {
+      if (themeName === 'custom' && !state.customBgBase64) {
+        document.getElementById('input-bg-file').click();
+        return;
+      }
+
+      state.theme = themeName;
+      const phoneScreen = document.getElementById('phone-screen');
+      
+      if (themeName === 'custom') {
+        phoneScreen.className = `w-full h-full theme-gold overflow-y-auto relative pt-8 pb-10 px-4 flex flex-col items-center text-center justify-between transition-all duration-300 bg-cover bg-center`;
+        phoneScreen.style.backgroundImage = `linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.75)), url("${state.customBgBase64}")`;
+      } else {
+        phoneScreen.style.backgroundImage = 'none';
+        phoneScreen.className = `w-full h-full theme-${themeName} overflow-y-auto relative pt-8 pb-10 px-4 flex flex-col items-center text-center justify-between transition-colors duration-300`;
+      }
+      
+      // Update radio check icons
+      document.querySelectorAll('.theme-card-option').forEach(card => {
+        const icon = card.querySelector('.fa-circle-check');
+        if (card.getAttribute('onclick').includes(themeName)) {
+          card.classList.add('border-amber-400');
+          if (icon) icon.classList.remove('opacity-0');
+        } else {
+          card.classList.remove('border-amber-400');
+          if (icon) icon.classList.add('opacity-0');
+        }
+      });
+    }
+
+    function handleBgUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          state.customBgBase64 = e.target.result;
+          const thumb = document.getElementById('custom-bg-thumb');
+          thumb.style.backgroundImage = `url("${state.customBgBase64}")`;
+          thumb.innerHTML = ''; // clear icon
+          setTheme('custom');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function removeCustomBg() {
+      state.customBgBase64 = '';
+      const thumb = document.getElementById('custom-bg-thumb');
+      thumb.style.backgroundImage = 'none';
+      thumb.innerHTML = '<i class="fa-solid fa-image text-lg mb-0.5"></i><span class="text-[10px] text-slate-300 font-semibold">Tu Imagen</span>';
+      if (state.theme === 'custom') {
+        setTheme('gold');
+      }
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          state.photoBase64 = e.target.result;
+          document.getElementById('img-preview-thumb').src = state.photoBase64;
+          document.getElementById('prev-photo').src = state.photoBase64;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleAudioUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          state.audioBase64 = e.target.result;
+          document.getElementById('audio-filename').textContent = file.name;
+          document.getElementById('audio-status-badge').textContent = 'MP3 Incrustado';
+          
+          const audioPlayer = document.getElementById('preview-audio-player');
+          audioPlayer.src = state.audioBase64;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function clearAudio() {
+      state.audioBase64 = '';
+      document.getElementById('audio-filename').textContent = 'Sin Música';
+      document.getElementById('audio-status-badge').textContent = 'Desactivado';
+      const audioPlayer = document.getElementById('preview-audio-player');
+      audioPlayer.pause();
+      audioPlayer.src = '';
+      state.isPlayingAudio = false;
+      document.getElementById('preview-music-icon').className = 'fa-solid fa-music text-xs';
+    }
+
+    function togglePreviewAudio() {
+      const audioPlayer = document.getElementById('preview-audio-player');
+      if (!audioPlayer.src && !state.audioBase64) {
+        alert("Por favor sube un archivo de audio MP3 en la pestaña '3. Foto & Audio' para probar la música.");
+        return;
+      }
+      if (!audioPlayer.src && state.audioBase64) {
+        audioPlayer.src = state.audioBase64;
+      }
+
+      if (state.isPlayingAudio) {
+        audioPlayer.pause();
+        state.isPlayingAudio = false;
+        document.getElementById('preview-music-icon').className = 'fa-solid fa-music text-xs';
+      } else {
+        audioPlayer.play().then(() => {
+          state.isPlayingAudio = true;
+          document.getElementById('preview-music-icon').className = 'fa-solid fa-pause text-xs';
+        }).catch(err => {
+          console.warn("Autoplay prevenido por el navegador", err);
+        });
+      }
+    }
+
+    function updatePreview() {
+      state.name = document.getElementById('input-name').value;
+      state.eventType = document.getElementById('input-event-type').value;
+      state.phrase = document.getElementById('input-phrase').value;
+      state.datetime = document.getElementById('input-datetime').value;
+      state.location = document.getElementById('input-location').value;
+      state.mapsUrl = document.getElementById('input-maps-url').value;
+      state.whatsappNum = document.getElementById('input-whatsapp-num').value;
+      state.whatsappMsg = document.getElementById('input-whatsapp-msg').value;
+
+      document.getElementById('prev-name').textContent = state.name || 'Nombre del Festejado';
+      document.getElementById('prev-event-type').textContent = state.eventType || 'Evento';
+      document.getElementById('prev-phrase').textContent = state.phrase || '';
+      document.getElementById('prev-location').textContent = state.location || 'Lugar del evento';
+
+      const mapsBtn = document.getElementById('prev-maps-link');
+      if (state.mapsUrl) {
+        mapsBtn.href = state.mapsUrl;
+        mapsBtn.classList.remove('hidden');
+      } else {
+        mapsBtn.classList.add('hidden');
+      }
+
+      const cleanNum = state.whatsappNum.replace(/[^0-9]/g, '');
+      const encodedMsg = encodeURIComponent(state.whatsappMsg);
+      document.getElementById('prev-whatsapp-btn').href = `https://wa.me/${cleanNum}?text=${encodedMsg}`;
+    }
+
+    function updateCountdown() {
+      if (!state.datetime) return;
+      const target = new Date(state.datetime).getTime();
+      const now = new Date().getTime();
+      const diff = target - now;
+
+      if (diff > 0) {
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('prev-days').textContent = String(d).padStart(2, '0');
+        document.getElementById('prev-hours').textContent = String(h).padStart(2, '0');
+        document.getElementById('prev-mins').textContent = String(m).padStart(2, '0');
+        document.getElementById('prev-secs').textContent = String(s).padStart(2, '0');
+      } else {
+        document.getElementById('prev-days').textContent = '00';
+        document.getElementById('prev-hours').textContent = '00';
+        document.getElementById('prev-mins').textContent = '00';
+        document.getElementById('prev-secs').textContent = '00';
+      }
+    }
+    setInterval(updateCountdown, 1000);
+
+    function triggerConfettiPreview() {
+      confetti({
+        particleCount: 80,
+        spread: 60,
+        origin: { y: 0.6 }
+      });
+    }
+
+    function downloadStandaloneHTML() {
+      const cleanNum = state.whatsappNum.replace(/[^0-9]/g, '');
+      const encodedMsg = encodeURIComponent(state.whatsappMsg);
+      const whatsappUrl = `https://wa.me/${cleanNum}?text=${encodedMsg}`;
+
+      const isCustomBg = state.theme === 'custom' && state.customBgBase64;
+      const customBgStyle = isCustomBg 
+        ? `background-image: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.75)), url('${state.customBgBase64}'); background-size: cover; background-position: center;`
+        : '';
+      const selectedThemeClass = isCustomBg ? 'theme-gold' : `theme-${state.theme}`;
+
+      // Build independent single HTML source code string
+      const standaloneCode = `<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitación Digital - ${state.name}</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Great+Vibes&family=Montserrat:wght@300;400;600;800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"><\/script>
+
+  <style>
+    .theme-gold {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: #f8fafc;
+      font-family: 'Cinzel', serif;
+    }
+    .theme-gold .accent-card {
+      background: rgba(30, 27, 75, 0.6);
+      border: 1px solid rgba(234, 179, 8, 0.4);
+      backdrop-filter: blur(8px);
+    }
+    .theme-gold .accent-btn {
+      background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%);
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .theme-infantil {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
+      color: #2d3748;
+      font-family: 'Outfit', sans-serif;
+    }
+    .theme-infantil .accent-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 2px dashed #f6ad55;
+    }
+    .theme-infantil .accent-btn {
+      background: #ed8936;
+      color: white;
+      font-weight: 700;
+      border-radius: 9999px;
+    }
+
+    .theme-boda {
+      background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+      color: #334155;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .theme-boda .accent-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #cbd5e1;
+    }
+    .theme-boda .accent-btn {
+      background: #475569;
+      color: #ffffff;
+    }
+
+    .theme-neon {
+      background: #09090b;
+      color: #00ffcc;
+      font-family: 'Outfit', sans-serif;
+    }
+    .theme-neon .accent-card {
+      background: rgba(18, 18, 20, 0.85);
+      border: 1px solid #ff007f;
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+    }
+    .theme-neon .accent-btn {
+      background: linear-gradient(90deg, #ff007f, #7928ca);
+      color: #ffffff;
+    }
+
+    .theme-minimal {
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .theme-minimal .accent-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+    }
+    .theme-minimal .accent-btn {
+      background: #0f172a;
+      color: #ffffff;
+    }
+
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 0.4; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .music-pulse {
+      animation: pulse-ring 2s infinite;
+    }
+  </style>
+</head>
+<body class="h-full flex justify-center items-center bg-slate-950 font-sans">
+
+  <div class="w-full max-w-md h-full min-h-screen ${selectedThemeClass} relative overflow-y-auto px-6 py-10 flex flex-col justify-between items-center text-center shadow-2xl" style="${customBgStyle}">
+    
+    ${state.audioBase64 ? `
+    <!-- Floating Music Button -->
+    <div class="absolute top-5 right-5 z-30">
+      <button id="music-toggle-btn" onclick="toggleAudio()" class="w-11 h-11 rounded-full bg-slate-900/80 text-amber-400 border border-amber-400/40 flex items-center justify-center shadow-xl music-pulse active:scale-90 transition">
+        <i id="music-icon" class="fa-solid fa-music text-sm"></i>
+      </button>
+      <audio id="bg-audio" loop src="${state.audioBase64}"></audio>
+    </div>` : ''}
+
+    <!-- Header Event Type -->
+    <div class="mt-4">
+      <span class="text-xs tracking-widest uppercase font-bold px-4 py-1.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+        ${state.eventType}
+      </span>
+    </div>
+
+    <!-- Portrait Image -->
+    <div class="my-6 relative">
+      <div class="w-44 h-44 sm:w-52 sm:h-52 rounded-full overflow-hidden border-4 border-amber-400/80 shadow-2xl mx-auto relative z-10">
+        <img src="${state.photoBase64}" class="w-full h-full object-cover">
+      </div>
+      <div class="absolute inset-0 rounded-full bg-amber-400/20 blur-xl -z-0"></div>
+    </div>
+
+    <!-- Name and Text -->
+    <div class="space-y-3 w-full px-2">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-wide text-amber-300 leading-tight">${state.name}</h1>
+      <p class="text-xs sm:text-sm text-slate-200 italic opacity-90 leading-relaxed max-w-xs mx-auto">
+        ${state.phrase}
+      </p>
+    </div>
+
+    <!-- Live Countdown Timer -->
+    <div class="w-full my-6">
+      <div class="accent-card rounded-2xl p-4 shadow-lg">
+        <span class="text-xs tracking-widest uppercase opacity-80 block mb-2 font-bold">Cuenta Regresiva</span>
+        <div class="grid grid-cols-4 gap-2 text-center">
+          <div class="bg-black/30 p-2 rounded-xl border border-white/10">
+            <span id="card-days" class="text-xl font-extrabold block leading-none">00</span>
+            <span class="text-[9px] opacity-75">DÍAS</span>
+          </div>
+          <div class="bg-black/30 p-2 rounded-xl border border-white/10">
+            <span id="card-hours" class="text-xl font-extrabold block leading-none">00</span>
+            <span class="text-[9px] opacity-75">HRS</span>
+          </div>
+          <div class="bg-black/30 p-2 rounded-xl border border-white/10">
+            <span id="card-mins" class="text-xl font-extrabold block leading-none">00</span>
+            <span class="text-[9px] opacity-75">MIN</span>
+          </div>
+          <div class="bg-black/30 p-2 rounded-xl border border-white/10">
+            <span id="card-secs" class="text-xl font-extrabold block leading-none">00</span>
+            <span class="text-[9px] opacity-75">SEG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location -->
+    <div class="w-full my-2">
+      <div class="accent-card rounded-2xl p-4 text-xs flex flex-col items-center gap-2">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-location-dot text-amber-400 text-lg"></i>
+          <span class="font-bold uppercase tracking-wider text-[11px]">Ubicación del Evento</span>
+        </div>
+        <p class="text-xs font-medium text-slate-200">${state.location}</p>
+        ${state.mapsUrl ? `<a href="${state.mapsUrl}" target="_blank" class="text-xs font-bold underline hover:text-amber-300 mt-1 flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i> Ver en Google Maps</a>` : ''}
+      </div>
+    </div>
+
+    <!-- WhatsApp RSVP Button -->
+    <div class="w-full mt-4 space-y-3">
+      <a href="${whatsappUrl}" target="_blank" class="accent-btn w-full py-3.5 px-6 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-xl transition transform active:scale-95">
+        <i class="fa-brands fa-whatsapp text-lg"></i>
+        <span>Confirmar Asistencia por WhatsApp</span>
+      </a>
+    </div>
+
+  </div>
+
+  <script>
+    const targetTime = new Date("${state.datetime}").getTime();
+
+    function updateCardTimer() {
+      const now = new Date().getTime();
+      const diff = targetTime - now;
+
+      if (diff > 0) {
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('card-days').textContent = String(d).padStart(2, '0');
+        document.getElementById('card-hours').textContent = String(h).padStart(2, '0');
+        document.getElementById('card-mins').textContent = String(m).padStart(2, '0');
+        document.getElementById('card-secs').textContent = String(s).padStart(2, '0');
+      } else {
+        document.getElementById('card-days').textContent = '00';
+        document.getElementById('card-hours').textContent = '00';
+        document.getElementById('card-mins').textContent = '00';
+        document.getElementById('card-secs').textContent = '00';
+      }
+    }
+    setInterval(updateCardTimer, 1000);
+    updateCardTimer();
+
+    window.addEventListener('load', () => {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    });
+
+    let isPlaying = false;
+    function toggleAudio() {
+      const audio = document.getElementById('bg-audio');
+      const icon = document.getElementById('music-icon');
+      if (!audio) return;
+
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        icon.className = 'fa-solid fa-music text-sm';
+      } else {
+        audio.play();
+        isPlaying = true;
+        icon.className = 'fa-solid fa-pause text-sm';
+      }
+    }
+
+    document.body.addEventListener('click', () => {
+      const audio = document.getElementById('bg-audio');
+      if (audio && !isPlaying) {
+        audio.play().then(() => {
+          isPlaying = true;
+          const icon = document.getElementById('music-icon');
+          if (icon) icon.className = 'fa-solid fa-pause text-sm';
+        }).catch(() => {});
+      }
+    }, { once: true });
+  <\/script>
+</body>
+</html>`;
+
+      const blob = new Blob([standaloneCode], { type: 'text/html;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `Invitacion_${state.name.replace(/\s+/g, '_')}.html`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    window.onload = function() {
+      updatePreview();
+      updateCountdown();
+    };
+  </script>
+</body>
+</html>
